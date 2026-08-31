@@ -1,0 +1,6 @@
+{
+  "name": "OneConnect",
+  "description": "Unified National Citizen Services, Government Schemes, and Career Opportunities Portal. Check eligibility, explore documentation guides, track application statuses, and consult the AI citizen assistant.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
