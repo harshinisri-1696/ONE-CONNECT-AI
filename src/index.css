@@ -1,1 +1,23 @@
 @import "tailwindcss";
+
+@layer base {
+  :root {
+    --primary-blue: #4169E1;
+    --dark-blue: #1E3A8A;
+    --light-blue: #E8F0FF;
+    --app-bg: #FFFFFF;
+    --sec-bg: #F7F9FC;
+    --app-text: #172033;
+    --sec-text: #667085;
+    --app-border: #E2E8F0;
+    --app-success: #16A34A;
+    --app-warning: #F59E0B;
+    --app-error: #DC2626;
+  }
+
+  body {
+    background-color: var(--sec-bg);
+    color: var(--app-text);
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  }
+}

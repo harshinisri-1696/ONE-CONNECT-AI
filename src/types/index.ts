@@ -1,12 +1,68 @@
 export type NavTab = 
   | 'home'
+  | 'navigator'
   | 'schemes'
+  | 'family'
+  | 'action_plan'
   | 'documents'
   | 'jobs'
   | 'wizard'
   | 'tracker'
+  | 'admin'
   | 'faq'
   | 'profile';
+
+export type NeedCategory =
+  | 'education'
+  | 'financial_assistance'
+  | 'employment'
+  | 'skill_development'
+  | 'healthcare'
+  | 'housing'
+  | 'agriculture'
+  | 'women_welfare'
+  | 'child_welfare'
+  | 'senior_citizen_welfare'
+  | 'disability_support'
+  | 'entrepreneurship'
+  | 'social_security';
+
+export interface DetectedNeed {
+  category: NeedCategory;
+  label: string;
+  priority: 'high' | 'medium' | 'low';
+  reasoning: string;
+  keywords: string[];
+  confidence: number; // 0 - 1
+  suggestedAction?: string;
+}
+
+export interface FamilyMember {
+  id: string;
+  relationship: 'Self' | 'Father' | 'Mother' | 'Spouse' | 'Son' | 'Daughter' | 'Brother' | 'Sister' | 'Grandparent' | 'Dependent';
+  name: string;
+  age: number;
+  gender: 'Male' | 'Female' | 'Transgender' | 'Other';
+  occupation: string;
+  education: string;
+  income: number;
+  specialConditions: string[]; // e.g. ['Student', 'Unemployed', 'Farmer', 'Disabled', 'Senior Citizen', 'Widow']
+  needs?: NeedCategory[];
+}
+
+export interface FamilyProfile {
+  id: string;
+  familyName: string;
+  headName: string;
+  state: string;
+  district: string;
+  totalFamilyIncome: number;
+  hasBPLCard: boolean;
+  members: FamilyMember[];
+  updatedAt: string;
+}
+
+export type VerificationStatus = 'recently_verified' | 'verification_due' | 'outdated';
 
 export interface SchemeItem {
   id: number | string;
@@ -19,11 +75,119 @@ export interface SchemeItem {
   documents: string | string[];
   level: 'Central' | 'State' | string;
   category: string;
+  needCategory?: NeedCategory;
   tags?: string[];
   department?: string;
+  official_source?: string;
   official_url?: string;
-  incomeLimit?: string;
+  last_verified?: string;
+  last_updated?: string;
+  verification_status?: VerificationStatus;
+  incomeLimit?: string | number;
+  maxIncome?: number;
+  minAge?: number;
+  maxAge?: number;
+  targetGender?: 'All' | 'Male' | 'Female' | 'Transgender';
+  requiredConditions?: string[];
+  eligibleStates?: string[];
   deadline?: string;
+}
+
+export interface EligibilityCriterion {
+  id: string;
+  name: string;
+  description: string;
+  satisfied: boolean;
+  citizenValue?: string | number | boolean;
+  requiredValue?: string | number | boolean;
+  actionAdvice?: string;
+}
+
+export interface EligibilityEvaluation {
+  schemeId: number | string;
+  schemeName: string;
+  category: string;
+  status: 'eligible' | 'almost_eligible' | 'not_eligible';
+  matchScore: number; // 0 - 100
+  matchedCount: number;
+  totalCriteriaCount: number;
+  matchedCriteria: EligibilityCriterion[];
+  missingCriteria: EligibilityCriterion[];
+  missingDocuments: string[];
+  explanation: string;
+  decisionFactors: string[];
+  actionGuidance: string;
+  targetMemberId?: string;
+  targetMemberName?: string;
+  officialUrl?: string;
+  officialSource?: string;
+  lastVerified?: string;
+  verificationStatus?: VerificationStatus;
+}
+
+export interface DocumentReadinessCheck {
+  schemeId: number | string;
+  schemeName: string;
+  readinessPercentage: number;
+  totalRequired: number;
+  availableCount: number;
+  missingCount: number;
+  uncertainCount: number;
+  documents: {
+    documentName: string;
+    status: 'available' | 'missing' | 'not_sure';
+    guidance: string;
+    officialDocId?: string;
+  }[];
+}
+
+export interface ActionPlanTask {
+  id: string;
+  schemeId?: number | string;
+  schemeName?: string;
+  title: string;
+  category: 'immediate' | 'service' | 'document' | 'deadline';
+  priority: 'critical' | 'high' | 'medium' | 'low';
+  matchPercentage?: number;
+  whyMatch?: string[];
+  missingRequirement?: string;
+  nextAction: string;
+  status: 'not_started' | 'in_progress' | 'completed';
+  officialUrl?: string;
+  officialSource?: string;
+  deadlineDate?: string;
+  assignedMember?: string;
+  createdAt: string;
+  completedAt?: string;
+}
+
+export interface SectorGapStatus {
+  category: NeedCategory;
+  label: string;
+  iconName: string;
+  state: 'checked' | 'not_evaluated' | 'no_program_found';
+  matchedSchemesCount: number;
+  description: string;
+  potentialPrograms: string[];
+}
+
+export interface BenefitGapReport {
+  totalSectors: number;
+  checkedCount: number;
+  unexploredCount: number;
+  noProgramCount: number;
+  sectors: SectorGapStatus[];
+  recommendationsSummary: string;
+}
+
+export interface SchemeSynergy {
+  schemeIds: (number | string)[];
+  schemeNames: string[];
+  synergyType: 'complementary' | 'sequential' | 'independent';
+  summary: string;
+  combinedBenefits: string;
+  compatibilityNote: string;
+  verifiedCombination: boolean;
 }
 
 export interface DocumentRequirement {
@@ -170,7 +334,11 @@ export interface ChatMessage {
   sender: 'user' | 'assistant' | 'system';
   text: string;
   timestamp: string;
-  suggestedActions?: { label: string; action: () => void }[];
+  matchedSchemes?: any[];
+  detectedNeeds?: any[];
+  synergies?: any[];
+  evaluations?: EligibilityEvaluation[];
+  suggestedActions?: { label: string; action?: () => void; prompt?: string }[];
   referencedItems?: {
     type: 'scheme' | 'document' | 'job';
     title: string;

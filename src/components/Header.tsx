@@ -19,8 +19,8 @@ import {
   PhoneCall,
   Menu,
   X,
-  ExternalLink,
-  ChevronRight,
+  Compass,
+  Users,
   Clock,
   Globe
 } from 'lucide-react';
@@ -34,6 +34,7 @@ export const Header: React.FC = () => {
     bookmarkedSchemes,
     bookmarkedDocs,
     bookmarkedJobs,
+    actionPlanTasks,
     notifications,
     markNotificationRead,
     clearAllNotifications,
@@ -44,19 +45,20 @@ export const Header: React.FC = () => {
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isNotifDropdownOpen, setIsNotifDropdownOpen] = useState(false);
-  const [isLangModalOpen, setIsLangModalOpen] = useState(false);
 
   const totalBookmarks = bookmarkedSchemes.length + bookmarkedDocs.length + bookmarkedJobs.length;
   const unreadNotifs = notifications.filter(n => !n.read).length;
+  const pendingTasks = actionPlanTasks.filter(t => t.status !== 'completed').length;
 
   const navItems: { id: NavTab; label: string; icon: React.ReactNode; badge?: number }[] = [
-    { id: 'home', label: t('nav.home', 'Home'), icon: <Home className="w-4 h-4" /> },
-    { id: 'schemes', label: t('nav.schemes', 'Schemes'), icon: <Layers className="w-4 h-4" /> },
+    { id: 'navigator', label: t('nav.navigator', 'Benefit Navigator'), icon: <Compass className="w-4 h-4" /> },
+    { id: 'family', label: t('nav.family', 'Family Profile'), icon: <Users className="w-4 h-4" /> },
+    { id: 'action_plan', label: t('nav.action_plan', 'Action Plan'), icon: <Layers className="w-4 h-4" />, badge: pendingTasks },
+    { id: 'schemes', label: t('nav.schemes', 'All Schemes'), icon: <FileText className="w-4 h-4" /> },
     { id: 'documents', label: t('nav.documents', 'Documents & Services'), icon: <FileText className="w-4 h-4" /> },
     { id: 'jobs', label: t('nav.jobs', 'Govt Jobs & Exams'), icon: <Briefcase className="w-4 h-4" /> },
-    { id: 'wizard', label: t('nav.wizard', 'Eligibility Wizard'), icon: <Sparkles className="w-4 h-4" /> },
     { id: 'tracker', label: t('nav.tracker', 'Track Status'), icon: <Clock className="w-4 h-4" /> },
-    { id: 'faq', label: t('nav.faq', 'Help & FAQ'), icon: <HelpCircle className="w-4 h-4" /> },
+    { id: 'admin', label: t('nav.admin', 'Data Quality'), icon: <ShieldCheck className="w-4 h-4" /> },
     { id: 'profile', label: t('nav.profile', 'My Workspace'), icon: <User className="w-4 h-4" />, badge: totalBookmarks },
   ];
 
@@ -74,7 +76,7 @@ export const Header: React.FC = () => {
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-1.5 font-medium text-slate-200">
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-              {t('ribbon.portal_title', 'National Single-Window Citizen Service Portal')}
+              {t('ribbon.portal_title', 'OneConnect — National Citizen Benefit Navigator & Welfare Portal')}
             </div>
             <span className="text-slate-600 hidden sm:inline">|</span>
             <span className="text-slate-400 hidden sm:inline">
@@ -83,13 +85,15 @@ export const Header: React.FC = () => {
           </div>
           <div className="flex items-center gap-3 text-slate-300">
             <div className="flex items-center gap-1 hover:text-white transition-colors">
-              <PhoneCall className="w-3 h-3 text-indigo-400" />
+              <PhoneCall className="w-3 h-3 text-blue-400" />
               <span className="text-slate-400 hidden md:inline">{t('ribbon.helpline', 'Citizen Helpline')}:</span>
               <span className="font-semibold text-slate-200">1800-11-2024</span>
             </div>
-            <span className="text-slate-700">|</span>
-            {/* Multi-language Selector in Ribbon */}
-            <LanguageSelector variant="ribbon" />
+            <span className="text-slate-700 hidden sm:inline">|</span>
+            <div className="hidden sm:flex items-center gap-1.5 text-slate-300 text-[11px]">
+              <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+              <span>Grounded in Official Portals (.gov.in / .nic.in)</span>
+            </div>
           </div>
         </div>
       </div>
@@ -101,30 +105,36 @@ export const Header: React.FC = () => {
           {/* Logo & Identity */}
           <div 
             id="brand-logo-btn"
-            onClick={() => handleNavClick('home')}
+            onClick={() => handleNavClick('navigator')}
             className="flex items-center gap-3 cursor-pointer group select-none shrink-0"
           >
-            <div className="relative">
+            <div className="w-11 h-11 rounded-xl bg-white p-1 border border-slate-200 shadow-sm flex items-center justify-center overflow-hidden group-hover:scale-105 transition-transform shrink-0">
               <img 
                 src="/logo.jpeg" 
                 alt="OneConnect Logo" 
-                className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl object-cover shadow-xs ring-2 ring-indigo-600/20 group-hover:ring-indigo-600/50 transition-all"
+                className="w-full h-full object-contain"
                 onError={(e) => {
-                  (e.currentTarget as HTMLElement).style.display = 'none';
+                  const target = e.currentTarget;
+                  target.style.display = 'none';
+                  if (target.parentElement) {
+                    target.parentElement.className = 'w-11 h-11 rounded-xl bg-blue-600 text-white flex items-center justify-center font-extrabold text-lg shadow-md';
+                    target.parentElement.innerHTML = '1C';
+                  }
                 }}
               />
             </div>
             <div>
-              <div className="flex items-center gap-1.5">
+              <div className="flex items-center gap-2">
                 <span className="text-xl sm:text-2xl font-extrabold tracking-tight text-slate-900">
-                  One<span className="text-indigo-600">Connect</span>
+                  One<span className="text-blue-600">Connect</span>
                 </span>
-                <span className="hidden sm:inline-block px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider bg-indigo-50 text-indigo-700 rounded-full border border-indigo-200">
-                  Official 2.0
+                <span className="hidden sm:inline-flex items-center gap-1 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider bg-emerald-50 text-emerald-700 rounded-full border border-emerald-200">
+                  <ShieldCheck className="w-3 h-3 text-emerald-600" />
+                  Official Welfare
                 </span>
               </div>
               <p className="text-[11px] sm:text-xs text-slate-500 font-medium tracking-tight">
-                Schemes, Citizen Documents & Public Careers
+                National Citizen Benefit Navigator & Unified Services
               </p>
             </div>
           </div>
@@ -139,12 +149,12 @@ export const Header: React.FC = () => {
                 value={globalSearch}
                 onChange={(e) => setGlobalSearch(e.target.value)}
                 onKeyDown={(e) => {
-                  if (e.key === 'Enter' && activeTab === 'home') {
+                  if (e.key === 'Enter') {
                     setActiveTab('schemes');
                   }
                 }}
                 placeholder={t('search.placeholder', 'Search schemes, documents, government exams...')}
-                className="w-full pl-9 pr-4 py-2 text-xs sm:text-sm bg-slate-100/80 hover:bg-slate-100 focus:bg-white text-slate-900 placeholder:text-slate-400 rounded-full border border-slate-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none transition-all"
+                className="w-full pl-9 pr-4 py-2 text-xs sm:text-sm bg-slate-100/80 hover:bg-slate-100 focus:bg-white text-slate-900 placeholder:text-slate-400 rounded-full border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none transition-all"
               />
               {globalSearch && (
                 <button
@@ -169,20 +179,20 @@ export const Header: React.FC = () => {
             <button
               id="header-check-eligibility-btn"
               onClick={() => setIsWizardOpen(true)}
-              className="hidden sm:flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 rounded-xl shadow-xs hover:shadow transition-all shadow-indigo-600/20"
+              className="hidden sm:flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 active:bg-blue-800 rounded-xl shadow-xs hover:shadow transition-all shadow-blue-600/20"
             >
               <Sparkles className="w-3.5 h-3.5" />
-              <span>{t('btn.check_eligibility', 'Check Eligibility')}</span>
+              <span>{t('btn.check_eligibility', 'Eligibility Wizard')}</span>
             </button>
 
             {/* AI Assistant Button */}
             <button
               id="header-ai-assistant-btn"
               onClick={() => setIsChatbotOpen(true)}
-              className="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-indigo-50 hover:text-indigo-700 border border-slate-200 hover:border-indigo-200 rounded-xl transition-all"
-              title="Open OneConnect Citizen AI Assistant"
+              className="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-blue-50 hover:text-blue-700 border border-slate-200 hover:border-blue-200 rounded-xl transition-all"
+              title="Open OneConnect AI Benefit Assistant"
             >
-              <MessageSquareText className="w-3.5 h-3.5 text-indigo-600" />
+              <MessageSquareText className="w-3.5 h-3.5 text-blue-600" />
               <span className="hidden sm:inline">{t('btn.ask_ai', 'AI Help')}</span>
             </button>
 
@@ -206,7 +216,7 @@ export const Header: React.FC = () => {
                     <div className="flex items-center gap-2">
                       <h4 className="text-xs font-bold uppercase tracking-wider text-slate-800">Notifications</h4>
                       {unreadNotifs > 0 && (
-                        <span className="px-1.5 py-0.2 bg-indigo-100 text-indigo-800 text-[10px] font-bold rounded-full">
+                        <span className="px-1.5 py-0.2 bg-blue-100 text-blue-800 text-[10px] font-bold rounded-full">
                           {unreadNotifs} new
                         </span>
                       )}
@@ -237,7 +247,7 @@ export const Header: React.FC = () => {
                             }
                           }}
                           className={`p-3 text-left hover:bg-slate-50 cursor-pointer transition-colors ${
-                            !n.read ? 'bg-indigo-50/40' : ''
+                            !n.read ? 'bg-blue-50/40' : ''
                           }`}
                         >
                           <div className="flex items-start justify-between gap-2">
@@ -280,7 +290,7 @@ export const Header: React.FC = () => {
                   onClick={() => handleNavClick(item.id)}
                   className={`flex items-center gap-2 px-3.5 py-1.5 text-xs font-semibold rounded-xl transition-all whitespace-nowrap ${
                     isActive
-                      ? 'bg-indigo-600 text-white shadow-xs'
+                      ? 'bg-blue-600 text-white shadow-xs'
                       : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
                   }`}
                 >
@@ -289,7 +299,7 @@ export const Header: React.FC = () => {
                   {item.badge !== undefined && item.badge > 0 && (
                     <span
                       className={`px-1.5 py-0.2 rounded-full text-[10px] font-bold ${
-                        isActive ? 'bg-white text-indigo-700' : 'bg-slate-200 text-slate-700'
+                        isActive ? 'bg-white text-blue-700' : 'bg-slate-200 text-slate-700'
                       }`}
                     >
                       {item.badge}
@@ -309,10 +319,10 @@ export const Header: React.FC = () => {
           <div className="p-3 bg-slate-50 rounded-2xl border border-slate-200 space-y-2">
             <div className="flex items-center justify-between text-xs font-bold text-slate-800">
               <span className="flex items-center gap-1.5">
-                <Globe className="w-4 h-4 text-indigo-600" />
+                <Globe className="w-4 h-4 text-blue-600" />
                 {t('lang.select', 'Language / भाषा')}
               </span>
-              <span className="text-[10px] text-indigo-600 font-semibold">12 Languages</span>
+              <span className="text-[10px] text-blue-600 font-semibold">12 Languages</span>
             </div>
             <LanguageSelector variant="header" />
           </div>
@@ -337,7 +347,7 @@ export const Header: React.FC = () => {
                   key={item.id}
                   onClick={() => handleNavClick(item.id)}
                   className={`flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold ${
-                    isActive ? 'bg-indigo-600 text-white' : 'text-slate-700 hover:bg-slate-100'
+                    isActive ? 'bg-blue-600 text-white' : 'text-slate-700 hover:bg-slate-100'
                   }`}
                 >
                   <div className="flex items-center gap-2.5">
@@ -347,7 +357,7 @@ export const Header: React.FC = () => {
                   {item.badge !== undefined && item.badge > 0 && (
                     <span
                       className={`px-2 py-0.5 rounded-full text-[10px] ${
-                        isActive ? 'bg-indigo-800 text-white' : 'bg-slate-200 text-slate-700'
+                        isActive ? 'bg-blue-800 text-white' : 'bg-slate-200 text-slate-700'
                       }`}
                     >
                       {item.badge}
@@ -364,9 +374,9 @@ export const Header: React.FC = () => {
                 setIsMobileMenuOpen(false);
                 setIsWizardOpen(true);
               }}
-              className="flex-1 py-2.5 text-xs font-semibold text-center text-white bg-indigo-600 rounded-xl shadow-xs"
+              className="flex-1 py-2.5 text-xs font-semibold text-center text-white bg-blue-600 rounded-xl shadow-xs"
             >
-              {t('btn.check_eligibility', 'Check Eligibility')}
+              {t('btn.check_eligibility', 'Eligibility Wizard')}
             </button>
             <button
               onClick={() => {
@@ -380,12 +390,6 @@ export const Header: React.FC = () => {
           </div>
         </div>
       )}
-
-      {/* Full Language Modal if opened */}
-      {isLangModalOpen && (
-        <LanguageSelector variant="modal" onClose={() => setIsLangModalOpen(false)} />
-      )}
     </header>
   );
 };
-

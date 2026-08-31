@@ -8,6 +8,10 @@ import {
   ApplicationStatusRecord,
   ActivityLog,
   CitizenNotification,
+  FamilyProfile,
+  FamilyMember,
+  ActionPlanTask,
+  DetectedNeed
 } from '../types';
 import { DEMO_APPLICATIONS, INITIAL_ACTIVITY_LOGS, INITIAL_NOTIFICATIONS } from '../data/demoApplications';
 import { CITIZEN_DOCUMENTS } from '../data/documentsData';
@@ -35,6 +39,130 @@ export const DEFAULT_PROFILE: EligibilityProfile = {
   experienceYears: 0,
 };
 
+export const DEFAULT_FAMILY_PROFILE: FamilyProfile = {
+  id: 'fam-default-01',
+  familyName: 'Sharma Household',
+  headName: 'Rajesh Sharma',
+  state: 'National / All States',
+  district: 'Central Delhi',
+  totalFamilyIncome: 240000,
+  hasBPLCard: false,
+  updatedAt: new Date().toISOString(),
+  members: [
+    {
+      id: 'mem-1',
+      relationship: 'Self',
+      name: 'Aarav Sharma',
+      age: 24,
+      gender: 'Male',
+      occupation: 'Job Seeker / Unemployed',
+      education: "Bachelor's Degree",
+      income: 0,
+      specialConditions: ['Unemployed', 'Student']
+    },
+    {
+      id: 'mem-2',
+      relationship: 'Father',
+      name: 'Rajesh Sharma',
+      age: 54,
+      gender: 'Male',
+      occupation: 'Small Farmer / Livelihood',
+      education: 'Secondary School',
+      income: 180000,
+      specialConditions: ['Farmer']
+    },
+    {
+      id: 'mem-3',
+      relationship: 'Mother',
+      name: 'Sunita Sharma',
+      age: 49,
+      gender: 'Female',
+      occupation: 'Homemaker & Artisan',
+      education: 'Primary School',
+      income: 60000,
+      specialConditions: ['Artisan']
+    },
+    {
+      id: 'mem-4',
+      relationship: 'Sister',
+      name: 'Pooja Sharma',
+      age: 8,
+      gender: 'Female',
+      occupation: 'Primary School Student',
+      education: 'Class 3',
+      income: 0,
+      specialConditions: ['Student']
+    }
+  ]
+};
+
+export const DEFAULT_ACTION_TASKS: ActionPlanTask[] = [
+  {
+    id: 'task-init-1',
+    schemeId: 9905,
+    schemeName: 'Higher Education Scholarship',
+    title: 'Apply for National Scholarship Portal (NSP)',
+    category: 'immediate',
+    priority: 'critical',
+    matchPercentage: 92,
+    whyMatch: ['Age 24 is eligible', 'Income below ₹4.5L threshold', 'Enrolled in higher studies'],
+    nextAction: 'Fill student registration on scholarships.gov.in and verify Institute Nodal Officer (INO)',
+    status: 'not_started',
+    officialUrl: 'https://scholarships.gov.in',
+    officialSource: 'Ministry of Education',
+    assignedMember: 'Aarav Sharma (Self)',
+    createdAt: new Date().toISOString()
+  },
+  {
+    id: 'task-init-2',
+    schemeId: 9906,
+    schemeName: 'PMKVY 4.0 Skill Certification',
+    title: 'Enroll in Free NSDC Technical Upskilling',
+    category: 'service',
+    priority: 'high',
+    matchPercentage: 88,
+    whyMatch: ['Unemployed youth age 15-45', 'Free certification + ₹8,000 reward bonus'],
+    nextAction: 'Locate nearest Pradhan Mantri Kaushal Kendra (PMKK) center',
+    status: 'not_started',
+    officialUrl: 'https://www.skillindia.gov.in',
+    officialSource: 'NSDC / MSDE',
+    assignedMember: 'Aarav Sharma (Self)',
+    createdAt: new Date().toISOString()
+  },
+  {
+    id: 'task-init-3',
+    schemeId: 9901,
+    schemeName: 'PM-KISAN Samman Nidhi',
+    title: 'Verify Land Record & Aadhaar e-KYC for Father',
+    category: 'immediate',
+    priority: 'high',
+    matchPercentage: 95,
+    whyMatch: ['Farmer landholder', 'Direct DBT ₹6,000/year'],
+    nextAction: 'Complete OTP or biometric e-KYC on pmkisan.gov.in',
+    status: 'in_progress',
+    officialUrl: 'https://pmkisan.gov.in',
+    officialSource: 'Ministry of Agriculture',
+    assignedMember: 'Rajesh Sharma (Father)',
+    createdAt: new Date().toISOString()
+  },
+  {
+    id: 'task-init-4',
+    schemeId: 9915,
+    schemeName: 'Sukanya Samriddhi Yojana (SSY)',
+    title: 'Open SSY Post Office Account for Sister (Age 8)',
+    category: 'service',
+    priority: 'high',
+    matchPercentage: 98,
+    whyMatch: ['Girl child below 10 years', 'High interest 8.2% p.a. + Tax free'],
+    nextAction: 'Visit nearest India Post branch with birth certificate & parent KYC',
+    status: 'not_started',
+    officialUrl: 'https://www.indiapost.gov.in',
+    officialSource: 'India Post / Ministry of Finance',
+    assignedMember: 'Pooja Sharma (Sister)',
+    createdAt: new Date().toISOString()
+  }
+];
+
 interface AppContextType {
   activeTab: NavTab;
   setActiveTab: (tab: NavTab) => void;
@@ -58,6 +186,26 @@ interface AppContextType {
   // Profile & Eligibility
   profile: EligibilityProfile;
   updateProfile: (profile: Partial<EligibilityProfile>) => void;
+
+  // Family Profile Innovation
+  familyProfile: FamilyProfile;
+  updateFamilyProfile: (partial: Partial<FamilyProfile>) => void;
+  addFamilyMember: (member: FamilyMember) => void;
+  removeFamilyMember: (id: string) => void;
+
+  // Action Plan Innovation
+  actionPlanTasks: ActionPlanTask[];
+  updateTaskStatus: (taskId: string, status: ActionPlanTask['status']) => void;
+  addTaskToActionPlan: (task: ActionPlanTask) => void;
+  removeTaskFromActionPlan: (taskId: string) => void;
+
+  // Needs Detection History
+  detectedNeedsHistory: DetectedNeed[];
+  setDetectedNeedsHistory: (needs: DetectedNeed[]) => void;
+
+  // Document Readiness Checklist
+  userDocumentsChecklist: Record<string, 'available' | 'missing' | 'not_sure'>;
+  updateDocumentStatus: (docName: string, status: 'available' | 'missing' | 'not_sure') => void;
   
   // Application Tracking
   applications: ApplicationStatusRecord[];
@@ -96,7 +244,7 @@ interface AppContextType {
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [activeTab, setActiveTab] = useState<NavTab>('home');
+  const [activeTab, setActiveTab] = useState<NavTab>('navigator');
   const [globalSearch, setGlobalSearch] = useState<string>('');
 
   // Language State
@@ -172,6 +320,76 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     }
   });
 
+  // Family Profile State
+  const [familyProfile, setFamilyProfile] = useState<FamilyProfile>(() => {
+    try {
+      const saved = localStorage.getItem('oneconnect_family_profile');
+      return saved ? JSON.parse(saved) : DEFAULT_FAMILY_PROFILE;
+    } catch {
+      return DEFAULT_FAMILY_PROFILE;
+    }
+  });
+
+  // Action Plan Tasks State
+  const [actionPlanTasks, setActionPlanTasks] = useState<ActionPlanTask[]>(() => {
+    try {
+      const saved = localStorage.getItem('oneconnect_action_tasks');
+      return saved ? JSON.parse(saved) : DEFAULT_ACTION_TASKS;
+    } catch {
+      return DEFAULT_ACTION_TASKS;
+    }
+  });
+
+  // Detected Needs State
+  const [detectedNeedsHistory, setDetectedNeedsHistory] = useState<DetectedNeed[]>(() => {
+    try {
+      const saved = localStorage.getItem('oneconnect_detected_needs');
+      return saved ? JSON.parse(saved) : [
+        {
+          category: 'education',
+          label: 'Education & Scholarship Assistance',
+          priority: 'high',
+          reasoning: 'College tuition and merit scholarship support identified.',
+          keywords: ['college', 'scholarship', 'fees'],
+          confidence: 0.95,
+          suggestedAction: 'Check higher education scholarships'
+        },
+        {
+          category: 'employment',
+          label: 'Employment & Job Support',
+          priority: 'high',
+          reasoning: 'Unemployed graduate seeking public or formal sector placement.',
+          keywords: ['unemployed', 'job'],
+          confidence: 0.92,
+          suggestedAction: 'Explore public recruitment and skill development'
+        }
+      ];
+    } catch {
+      return [];
+    }
+  });
+
+  // Document Readiness Checklist
+  const [userDocumentsChecklist, setUserDocumentsChecklist] = useState<Record<string, 'available' | 'missing' | 'not_sure'>>(() => {
+    try {
+      const saved = localStorage.getItem('oneconnect_doc_checklist');
+      return saved ? JSON.parse(saved) : {
+        'Aadhaar Card': 'available',
+        'Bank Passbook': 'available',
+        'Class 12 Marksheet': 'available',
+        'Student ID Card': 'available',
+        'Income Certificate': 'missing',
+        'Ration Card': 'missing',
+        'Caste Certificate': 'not_sure'
+      };
+    } catch {
+      return {
+        'Aadhaar Card': 'available',
+        'Bank Passbook': 'available'
+      };
+    }
+  });
+
   // Applications
   const [applications, setApplications] = useState<ApplicationStatusRecord[]>(() => {
     try {
@@ -226,6 +444,22 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   useEffect(() => {
     localStorage.setItem('oneconnect_user_profile', JSON.stringify(profile));
   }, [profile]);
+
+  useEffect(() => {
+    localStorage.setItem('oneconnect_family_profile', JSON.stringify(familyProfile));
+  }, [familyProfile]);
+
+  useEffect(() => {
+    localStorage.setItem('oneconnect_action_tasks', JSON.stringify(actionPlanTasks));
+  }, [actionPlanTasks]);
+
+  useEffect(() => {
+    localStorage.setItem('oneconnect_detected_needs', JSON.stringify(detectedNeedsHistory));
+  }, [detectedNeedsHistory]);
+
+  useEffect(() => {
+    localStorage.setItem('oneconnect_doc_checklist', JSON.stringify(userDocumentsChecklist));
+  }, [userDocumentsChecklist]);
 
   useEffect(() => {
     localStorage.setItem('oneconnect_applications', JSON.stringify(applications));
@@ -284,6 +518,74 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   const updateProfile = (partial: Partial<EligibilityProfile>) => {
     setProfile(prev => ({ ...prev, ...partial }));
     addActivity('Updated citizen eligibility profile', 'Profile Criteria', 'eligibility_check');
+  };
+
+  const updateFamilyProfile = (partial: Partial<FamilyProfile>) => {
+    setFamilyProfile(prev => ({
+      ...prev,
+      ...partial,
+      updatedAt: new Date().toISOString()
+    }));
+    addActivity('Updated Family Benefit Profile', `${partial.familyName || familyProfile.familyName}`, 'eligibility_check');
+  };
+
+  const addFamilyMember = (member: FamilyMember) => {
+    setFamilyProfile(prev => ({
+      ...prev,
+      members: [...prev.members, member],
+      updatedAt: new Date().toISOString()
+    }));
+    addActivity('Added family member', `${member.name} (${member.relationship})`, 'eligibility_check');
+    setNotifications(prev => [
+      {
+        id: `notif-${Date.now()}`,
+        title: 'Family Member Added',
+        message: `${member.name} (${member.relationship}) added to Family Welfare profile. Evaluated against age-specific schemes.`,
+        timestamp: 'Just now',
+        read: false,
+        type: 'info',
+        linkTab: 'family'
+      },
+      ...prev
+    ]);
+  };
+
+  const removeFamilyMember = (id: string) => {
+    setFamilyProfile(prev => ({
+      ...prev,
+      members: prev.members.filter(m => m.id !== id),
+      updatedAt: new Date().toISOString()
+    }));
+  };
+
+  const updateTaskStatus = (taskId: string, status: ActionPlanTask['status']) => {
+    setActionPlanTasks(prev =>
+      prev.map(t =>
+        t.id === taskId
+          ? {
+              ...t,
+              status,
+              completedAt: status === 'completed' ? new Date().toISOString() : undefined
+            }
+          : t
+      )
+    );
+  };
+
+  const addTaskToActionPlan = (task: ActionPlanTask) => {
+    setActionPlanTasks(prev => [task, ...prev.filter(t => t.id !== task.id)]);
+    addActivity('Added task to Welfare Action Plan', task.title, 'apply');
+  };
+
+  const removeTaskFromActionPlan = (taskId: string) => {
+    setActionPlanTasks(prev => prev.filter(t => t.id !== taskId));
+  };
+
+  const updateDocumentStatus = (docName: string, status: 'available' | 'missing' | 'not_sure') => {
+    setUserDocumentsChecklist(prev => ({
+      ...prev,
+      [docName]: status
+    }));
   };
 
   const addApplication = (app: ApplicationStatusRecord) => {
@@ -361,6 +663,18 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
         toggleJobBookmark,
         profile,
         updateProfile,
+        familyProfile,
+        updateFamilyProfile,
+        addFamilyMember,
+        removeFamilyMember,
+        actionPlanTasks,
+        updateTaskStatus,
+        addTaskToActionPlan,
+        removeTaskFromActionPlan,
+        detectedNeedsHistory,
+        setDetectedNeedsHistory,
+        userDocumentsChecklist,
+        updateDocumentStatus,
         applications,
         addApplication,
         findApplication,

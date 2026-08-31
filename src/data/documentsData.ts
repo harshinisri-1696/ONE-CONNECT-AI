@@ -378,6 +378,263 @@ export const CITIZEN_DOCUMENTS: CitizenDocument[] = [
       'Under the Registration of Births and Deaths (Amendment) Act 2023, digital birth certificates serve as single conclusive age proof.',
       'Child name can be updated within 12 months without penalty.'
     ]
+  },
+  {
+    id: 'eshram',
+    name: 'e-Shram Card (National Database of Unorganised Workers)',
+    category: 'welfare',
+    department: 'Ministry of Labour and Employment (MoLE)',
+    description: '12-digit Universal Account Number (UAN) card for unorganised workers (construction laborers, migrant workers, gig & platform workers, domestic helpers, street vendors, small farmers), providing social security benefits and accidental insurance cover.',
+    validity: 'Lifetime (No renewal required; annual profile updates recommended)',
+    processingTime: 'Instant (Under 5 Minutes online)',
+    estimatedFee: '100% Free on official portal / ₹20 at CSC centers',
+    officialPortalUrl: 'https://eshram.gov.in',
+    helpline: '14434 / 1800-137-4150',
+    difficulty: 'Easy',
+    popular: true,
+    prerequisites: [
+      'Age must be between 16 and 59 years.',
+      'Must NOT be a member of EPFO (Provident Fund) or ESIC, and not an income tax payee.'
+    ],
+    requirements: [
+      {
+        id: 'eshram-aadhaar',
+        name: 'Aadhaar Card with Linked Mobile',
+        mandatory: true,
+        type: 'identity',
+        acceptedDocs: ['Aadhaar Number with active OTP-receiving mobile']
+      },
+      {
+        id: 'eshram-bank',
+        name: 'Active Bank Account Details (DBT Enabled)',
+        mandatory: true,
+        type: 'income',
+        acceptedDocs: ['Bank Account Number and IFSC Code (Aadhaar Seeded)']
+      },
+      {
+        id: 'eshram-occ',
+        name: 'Primary Occupation / Skill Details',
+        mandatory: true,
+        type: 'other',
+        acceptedDocs: ['Selection from standard National Classification of Occupations (NCO) trade code']
+      }
+    ],
+    usageGuidelines: [
+      'Provides ₹2 Lakh accidental death / permanent disability insurance cover under PMSBY.',
+      'Direct inclusion into future disaster relief and social welfare DBT transfers directly from Central & State ministries.',
+      'Download laminated digital UAN Card directly onto DigiLocker or save as PDF.'
+    ]
+  },
+  {
+    id: 'udyam',
+    name: 'Udyam MSME Registration Certificate',
+    category: 'financial',
+    department: 'Ministry of Micro, Small and Medium Enterprises (MSME)',
+    description: 'Official Government of India certificate for Micro, Small, and Medium Enterprises (MSMEs), mandatory for collateral-free bank loans, 50% patent/trademark discounts, and government tender priority.',
+    validity: 'Lifetime (Permanent Udyam Registration Number)',
+    processingTime: 'Instant / 1 to 2 Business Days',
+    estimatedFee: '100% Free (Government Portal charges ₹0.00)',
+    officialPortalUrl: 'https://udyamregistration.gov.in',
+    helpline: '011-23063288',
+    difficulty: 'Easy',
+    popular: true,
+    prerequisites: [
+      'Proprietor/Partner/Director Aadhaar Card and PAN Card.',
+      'GSTIN is mandatory for manufacturing/trading enterprises as per CGST Act (exempt for small service units below threshold).'
+    ],
+    requirements: [
+      {
+        id: 'udyam-pan',
+        name: 'PAN Card of Enterprise / Owner',
+        mandatory: true,
+        type: 'identity',
+        acceptedDocs: ['Individual PAN (for Proprietorship) or Business Entity PAN']
+      },
+      {
+        id: 'udyam-aadhaar',
+        name: 'Aadhaar of Entrepreneur',
+        mandatory: true,
+        type: 'identity',
+        acceptedDocs: ['Aadhaar Card with active mobile for OTP validation']
+      },
+      {
+        id: 'udyam-bank',
+        name: 'Current / Savings Bank Account Details',
+        mandatory: true,
+        type: 'income',
+        acceptedDocs: ['Bank Account Number and IFSC code']
+      }
+    ],
+    usageGuidelines: [
+      'Zero paperwork / completely self-declaration based paperless online system.',
+      'Eligible for Priority Sector Lending (PSL) with lower interest rates from nationalized banks.',
+      'Protection against delayed payments under MSMED Act with mandatory 45-day clearance rule.'
+    ]
+  },
+  {
+    id: 'abha',
+    name: 'Ayushman Bharat Health Account (ABHA Card / Health ID)',
+    category: 'welfare',
+    department: 'National Health Authority (NHA) / Ministry of Health and Family Welfare',
+    description: '14-digit unique health identifier under the Ayushman Bharat Digital Mission (ABDM) to digitally store and share medical records, lab reports, and prescriptions securely across hospitals and doctors nationwide.',
+    validity: 'Lifetime',
+    processingTime: 'Instant (Under 2 Minutes)',
+    estimatedFee: '100% Free',
+    officialPortalUrl: 'https://abha.abdm.gov.in',
+    helpline: '1800-11-4477',
+    difficulty: 'Easy',
+    popular: true,
+    prerequisites: [
+      'Aadhaar Number or Driving License with linked mobile number.'
+    ],
+    requirements: [
+      {
+        id: 'abha-aadhaar',
+        name: 'Aadhaar Card or Driving License',
+        mandatory: true,
+        type: 'identity',
+        acceptedDocs: ['Aadhaar Number for Instant OTP validation or DL']
+      },
+      {
+        id: 'abha-mobile',
+        name: 'Active Mobile Number',
+        mandatory: true,
+        type: 'other',
+        acceptedDocs: ['Mobile number for OTP verification and ABHA address creation']
+      }
+    ],
+    usageGuidelines: [
+      'Allows paperless registration at OPD counters in 30,000+ hospitals using Scan & Share QR code.',
+      '100% user consent controlled: no hospital can access your diagnostic history without your OTP approval on the ABHA App.'
+    ]
+  },
+  {
+    id: 'digilocker',
+    name: 'DigiLocker Digital Document Wallet',
+    category: 'civic',
+    department: 'Ministry of Electronics and Information Technology (MeitY)',
+    description: 'Flagship initiative under Digital India providing a secure dedicated cloud platform for issuance and verification of digital certificates, recognized on par with physical original documents under Rule 9A of IT Rules 2016.',
+    validity: 'Lifetime (1 GB Free Secure Cloud Storage)',
+    processingTime: 'Instant Account Creation',
+    estimatedFee: '100% Free',
+    officialPortalUrl: 'https://www.digilocker.gov.in',
+    helpline: '1800-111-555',
+    difficulty: 'Easy',
+    popular: true,
+    prerequisites: [
+      'Aadhaar number linked to mobile phone for one-time registration.'
+    ],
+    requirements: [
+      {
+        id: 'digi-aadhaar',
+        name: 'Aadhaar Number',
+        mandatory: true,
+        type: 'identity',
+        acceptedDocs: ['12-digit Aadhaar Number with OTP']
+      },
+      {
+        id: 'digi-pin',
+        name: '6-digit Security Security PIN',
+        mandatory: true,
+        type: 'other',
+        acceptedDocs: ['User-created 6-digit confidential PIN']
+      }
+    ],
+    usageGuidelines: [
+      'Fetch Driving License, Vehicle Registration (RC), Class 10/12 Marksheets, Caste Certificate, and Ration Card directly from issuing authorities.',
+      'Accepted by Traffic Police, Airport Security (CISF), and Universities nationwide without carrying physical originals.'
+    ]
+  },
+  {
+    id: 'ews-certificate',
+    name: 'Economically Weaker Section (EWS) Certificate',
+    category: 'certificates',
+    department: 'Department of Personnel and Training (DoPT) / State Revenue Authorities',
+    description: 'Income and Asset certificate entitling eligible General category citizens to 10% reservation in Central & State Government jobs and admissions in educational institutions (IITs, NITs, AIIMS, Central Universities).',
+    validity: '1 Financial Year (Valid for appointments during the succeeding financial year)',
+    processingTime: '15 to 21 Business Days',
+    estimatedFee: '₹20 to ₹60 (e-District portal fee)',
+    officialPortalUrl: 'https://serviceonline.gov.in',
+    helpline: 'State e-District Helpdesk',
+    difficulty: 'Medium',
+    popular: true,
+    prerequisites: [
+      'Belong to General Category (not covered under SC, ST, or OBC reservation).',
+      'Gross annual family income must be below ₹8,00,000 (Rupees Eight Lakhs).',
+      'Must NOT own 5+ acres of agricultural land, residential flat of 1000+ sq ft, or residential plot of 100+ sq yards in notified municipalities.'
+    ],
+    requirements: [
+      {
+        id: 'ews-id',
+        name: 'Identity & Address Proof',
+        mandatory: true,
+        type: 'identity',
+        acceptedDocs: ['Aadhaar Card', 'Voter ID', 'Ration Card', 'Domicile Certificate']
+      },
+      {
+        id: 'ews-income',
+        name: 'Income & Asset Evidence',
+        mandatory: true,
+        type: 'income',
+        acceptedDocs: ['Form 16 / ITR Acknowledgment', 'Patwari Land Holding Report', 'Property deed / Electricity bill']
+      },
+      {
+        id: 'ews-affidavit',
+        name: 'Notarized Self-Declaration Affidavit',
+        mandatory: true,
+        type: 'other',
+        acceptedDocs: ['Affidavit declaring family income and land assets below prescribed ceiling']
+      }
+    ],
+    usageGuidelines: [
+      'Apply at Tehsildar / Sub-Divisional Magistrate (SDM) / Revenue Division Office.',
+      'Must be updated annually after April 1st with fresh income verification for the new fiscal year.'
+    ]
+  },
+  {
+    id: 'udid',
+    name: 'Unique Disability ID (UDID) Card & Certificate',
+    category: 'welfare',
+    department: 'Department of Empowerment of Persons with Disabilities (DEPwD), MoSJE',
+    description: 'Universal Smart Card issued to Persons with Disabilities (PwD) containing disability percentage and medical history, eliminating the need to carry multiple physical medical records for travel concessions, pensions, and quotas.',
+    validity: 'Permanent (for permanent disabilities) or 5 Years (temporary conditions)',
+    processingTime: '30 to 45 Days (includes Medical Board assessment)',
+    estimatedFee: '100% Free',
+    officialPortalUrl: 'https://www.swavlambancard.gov.in',
+    helpline: '011-24365019',
+    difficulty: 'Medium',
+    popular: false,
+    prerequisites: [
+      'Disability assessment by certified Medical Board at District Civil Hospital.',
+      'Minimum 40% benchmark disability for welfare scheme and reservation entitlement.'
+    ],
+    requirements: [
+      {
+        id: 'udid-id',
+        name: 'Proof of Identity and Address',
+        mandatory: true,
+        type: 'identity',
+        acceptedDocs: ['Aadhaar Card', 'Voter ID', 'Ration Card']
+      },
+      {
+        id: 'udid-medical',
+        name: 'Hospital Medical Records / Old Disability Certificate',
+        mandatory: true,
+        type: 'other',
+        acceptedDocs: ['Hospital Clinical Case Sheet', 'Audiometry/Visual assessment report', 'Civil Hospital Medical Board Report']
+      },
+      {
+        id: 'udid-photo',
+        name: 'Recent Passport Photo showing Disability',
+        mandatory: true,
+        type: 'other',
+        acceptedDocs: ['Passport size colored photograph clearly showing physical condition']
+      }
+    ],
+    usageGuidelines: [
+      'Entitles holder to Indian Railways concessions (up to 75% in AC/Sleeper) and State RTC bus passes.',
+      'Mandatory for Divyangjan scholarships and ADIP scheme free assistive devices (wheelchairs, hearing aids, prosthetics).'
+    ]
   }
 ];
 
@@ -578,5 +835,134 @@ export const APPLICATION_GUIDES: Record<string, ApplicationGuide> = {
       'Mismatch in spouse name between marriage certificate and application.'
     ],
     verificationProcess: 'Physical document inspection at PSK followed by digital/physical Police Verification Report (PVR) submitted by district special branch directly to Regional Passport Office.'
+  },
+  eshram: {
+    documentId: 'eshram',
+    documentName: 'e-Shram Universal Account Number (UAN) Card',
+    overview: 'Complete self-registration for unorganised workers on eshram.gov.in using Aadhaar OTP to receive digital UAN Card and ₹2 Lakh PMSBY accidental insurance cover.',
+    officialPortal: 'https://eshram.gov.in',
+    onlineSteps: [
+      {
+        stepNumber: 1,
+        title: 'Access Self-Enrollment on e-Shram Portal',
+        description: 'Open eshram.gov.in and click "Register on e-Shram". Enter your Aadhaar-linked mobile number and captcha.',
+        checklistItems: [
+          'Visit eshram.gov.in',
+          'Enter Aadhaar linked Mobile Number',
+          'Confirm you are NOT an EPFO / ESIC member',
+          'Submit OTP received on mobile'
+        ],
+        estimatedDuration: '2 Minutes'
+      },
+      {
+        stepNumber: 2,
+        title: 'Authenticate Aadhaar e-KYC',
+        description: 'Enter your 12-digit Aadhaar Number, agree to terms, and choose OTP mode. Enter the Aadhaar OTP to pull demographic and photo details automatically.',
+        checklistItems: [
+          'Enter 12-digit Aadhaar Number',
+          'Enter OTP received from UIDAI',
+          'Verify your name, DoB, and residential address'
+        ],
+        tip: 'Ensure your Aadhaar is linked with active mobile number before beginning.',
+        estimatedDuration: '2 Minutes'
+      },
+      {
+        stepNumber: 3,
+        title: 'Fill Personal, Bank, and Occupation Details',
+        description: 'Enter social category, marital status, nominee name, educational qualification, income slab, primary occupation (search trade from list), and bank account details.',
+        checklistItems: [
+          'Add Nominee details (Name, Relationship, Age)',
+          'Select Primary Occupation from NCO List (e.g., Construction Worker, Driver, Tailor)',
+          'Enter Bank Account Number and IFSC Code for DBT'
+        ],
+        estimatedDuration: '4 Minutes'
+      },
+      {
+        stepNumber: 4,
+        title: 'Review Self-Declaration & Download UAN Card',
+        description: 'Verify the preview summary and submit. Your 12-digit UAN Card will be instantly generated. Click "Download UAN Card" to save the high-resolution PDF.',
+        checklistItems: [
+          'Check all details on preview screen',
+          'Submit final declaration',
+          'Download UAN Card PDF with QR Code'
+        ],
+        estimatedDuration: '1 Minute'
+      }
+    ],
+    offlineSteps: [
+      {
+        stepNumber: 1,
+        title: 'Visit Common Service Centre (CSC)',
+        description: 'Walk in to nearest CSC / VLE center with Aadhaar Card, mobile, and bank passbook. CSC operator will register you using fingerprint biometric authentication for free.',
+        checklistItems: ['Aadhaar Card', 'Active Mobile', 'Bank Passbook'],
+        estimatedDuration: '15 Minutes'
+      }
+    ],
+    commonMistakes: [
+      'Entering bank account not linked to Aadhaar (causes DBT subsidy failures).',
+      'Registering if already enrolled under EPFO or ESIC as a formal salaried employee.',
+      'Selecting incorrect occupation code.'
+    ],
+    verificationProcess: 'Automated real-time API checks with UIDAI for biometric identity, NPCI for Aadhaar-bank account mapping, and EPFO/ESIC exclusion databases.'
+  },
+  udyam: {
+    documentId: 'udyam',
+    documentName: 'Udyam MSME Registration Certificate',
+    overview: 'Paperless online registration for micro, small, and medium businesses to receive a lifetime Udyam Registration Certificate with QR code.',
+    officialPortal: 'https://udyamregistration.gov.in',
+    onlineSteps: [
+      {
+        stepNumber: 1,
+        title: 'Aadhaar & PAN Verification on Udyam Portal',
+        description: 'Visit udyamregistration.gov.in -> Click "For New Entrepreneurs who are not Registered yet as MSME". Enter proprietor/director Aadhaar and PAN for real-time verification.',
+        checklistItems: [
+          'Enter Aadhaar number and Entrepreneur Name',
+          'Validate OTP received on Aadhaar mobile',
+          'Enter PAN number and validate with Income Tax Department'
+        ],
+        estimatedDuration: '3 Minutes'
+      },
+      {
+        stepNumber: 2,
+        title: 'Enter Enterprise Details & Plant Location',
+        description: 'Enter enterprise name, unit location, postal address, date of business commencement, bank account details (A/C and IFSC), and Major Activity (Manufacturing / Services).',
+        checklistItems: [
+          'Name of Enterprise and Unit Address',
+          'Select NIC Code for business activity (2-digit, 4-digit, 5-digit)',
+          'Number of persons employed (Male / Female)'
+        ],
+        estimatedDuration: '5 Minutes'
+      },
+      {
+        stepNumber: 3,
+        title: 'Investment in Plant & Machinery Declaration',
+        description: 'Provide written-down investment and annual turnover figures (auto-pulled from ITR if filed, or self-declared for new businesses).',
+        checklistItems: [
+          'Enter Plant & Machinery / Equipment Investment',
+          'Enter Total Annual Turnover',
+          'Opt in for Government e-Marketplace (GeM) and TReDS portals'
+        ],
+        tip: 'Opting into GeM enables your business to sell goods/services directly to Government departments.',
+        estimatedDuration: '3 Minutes'
+      },
+      {
+        stepNumber: 4,
+        title: 'Final OTP Submission & Certificate Issuance',
+        description: 'Enter final mobile OTP. A unique Udyam Registration Number (e.g., UDYAM-XX-00-0000000) will be generated. Download the official certificate containing verifiable QR code.',
+        checklistItems: [
+          'Submit final OTP',
+          'Copy Udyam Registration Reference Number',
+          'Download and print Udyam Certificate'
+        ],
+        estimatedDuration: '1 Minute'
+      }
+    ],
+    offlineSteps: [],
+    commonMistakes: [
+      'Registering on fraudulent third-party payment websites (official portal is 100% free with ₹0 fee).',
+      'Mismatch in PAN name and Aadhaar name.',
+      'Selecting wrong 5-digit NIC activity classification.'
+    ],
+    verificationProcess: 'Fully automated server integration between MSME Ministry, Central Board of Direct Taxes (CBDT), and GST Network (GSTN).'
   }
 };

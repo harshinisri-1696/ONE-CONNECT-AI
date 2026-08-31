@@ -2,6 +2,12 @@ import React from 'react';
 import { AppProvider, useApp } from './context/AppContext';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
+
+// Pages
+import { NavigatorPage } from './pages/NavigatorPage';
+import { FamilyProfilePage } from './pages/FamilyProfilePage';
+import { ActionPlanPage } from './pages/ActionPlanPage';
+import { AdminDataQualityPage } from './pages/AdminDataQualityPage';
 import { HomePage } from './pages/HomePage';
 import { SchemesPage } from './pages/SchemesPage';
 import { DocumentsPage } from './pages/DocumentsPage';
@@ -21,19 +27,16 @@ import { NewApplicationModal } from './components/NewApplicationModal';
 import { ChatbotDrawer } from './components/ChatbotDrawer';
 
 // Icons
-import { Bot, Sparkles, HelpCircle, ArrowUp } from 'lucide-react';
+import { Bot, Sparkles, Compass } from 'lucide-react';
 
 const AppContent: React.FC = () => {
   const {
     activeTab,
+    setActiveTab,
     setIsChatbotOpen,
     setIsWizardOpen,
     isChatbotOpen
   } = useApp();
-
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900 font-sans antialiased selection:bg-blue-600 selection:text-white">
@@ -42,6 +45,10 @@ const AppContent: React.FC = () => {
 
       {/* Main Page Content Body */}
       <main className="flex-1">
+        {activeTab === 'navigator' && <NavigatorPage />}
+        {activeTab === 'family' && <FamilyProfilePage />}
+        {activeTab === 'action_plan' && <ActionPlanPage />}
+        {activeTab === 'admin' && <AdminDataQualityPage />}
         {activeTab === 'home' && <HomePage />}
         {activeTab === 'schemes' && <SchemesPage />}
         {activeTab === 'documents' && <DocumentsPage />}
@@ -66,14 +73,17 @@ const AppContent: React.FC = () => {
 
       {/* Floating Action Buttons */}
       <div className="fixed bottom-6 right-6 z-40 flex flex-col items-end gap-3">
-        {/* Floating Eligibility Button (hidden on mobile if wizard active) */}
-        {activeTab !== 'wizard' && (
+        {/* Floating Benefit Navigator Button */}
+        {activeTab !== 'navigator' && (
           <button
-            onClick={() => setIsWizardOpen(true)}
+            onClick={() => {
+              setActiveTab('navigator');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
             className="hidden sm:flex items-center gap-2 px-4 py-2.5 bg-white hover:bg-slate-50 text-slate-800 text-xs font-bold rounded-full shadow-lg border border-slate-200 hover:border-blue-300 transition-all hover:scale-105 group"
           >
-            <Sparkles className="w-4 h-4 text-blue-600 group-hover:rotate-12 transition-transform" />
-            <span>Eligibility Check</span>
+            <Compass className="w-4 h-4 text-blue-600 group-hover:rotate-45 transition-transform" />
+            <span>Benefit Navigator</span>
           </button>
         )}
 
@@ -82,7 +92,7 @@ const AppContent: React.FC = () => {
           <button
             onClick={() => setIsChatbotOpen(true)}
             className="flex items-center gap-2.5 px-5 py-3.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-full shadow-2xl hover:shadow-blue-500/25 transition-all hover:scale-105 active:scale-95 group border-2 border-white/20"
-            title="Ask OneConnect AI Citizen Assistant"
+            title="Ask OneConnect AI Assistant"
           >
             <div className="relative">
               <Bot className="w-5 h-5 group-hover:animate-bounce" />
